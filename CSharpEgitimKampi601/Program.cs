@@ -1,11 +1,10 @@
-﻿using CSharpEgitimKampi501.CSharpEgitimKampi601;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace CSharpEgitimKampi501
+namespace CSharpEgitimKampi601
 {
     internal static class Program
     {
@@ -17,7 +16,7 @@ namespace CSharpEgitimKampi501
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MongoDbFormApplication());
+            Application.Run(new Form1());
         }
     }
 }
