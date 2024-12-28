@@ -1,4 +1,4 @@
-﻿using CSharpEgitimKampi501.CSharpEgitimKampi601;
+﻿using CSharpEgitimKampi501;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace CSharpEgitimKampi501
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MongoDbFormApplication());
+            Application.Run(new Form1());
         }
     }
 }

@@ -45,6 +45,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtCustomerId = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnGetById = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -54,7 +55,7 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(351, 12);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(556, 353);
+            this.dataGridView1.Size = new System.Drawing.Size(629, 404);
             this.dataGridView1.TabIndex = 34;
             // 
             // btnAdd
@@ -63,7 +64,7 @@
             this.btnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.btnAdd.Location = new System.Drawing.Point(167, 218);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(137, 45);
+            this.btnAdd.Size = new System.Drawing.Size(146, 45);
             this.btnAdd.TabIndex = 33;
             this.btnAdd.Text = "Ekle";
             this.btnAdd.UseVisualStyleBackColor = false;
@@ -75,10 +76,11 @@
             this.btnDelete.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.btnDelete.Location = new System.Drawing.Point(167, 269);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(137, 45);
+            this.btnDelete.Size = new System.Drawing.Size(146, 45);
             this.btnDelete.TabIndex = 32;
             this.btnDelete.Text = "Sil";
             this.btnDelete.UseVisualStyleBackColor = false;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // btnUpdate
             // 
@@ -86,10 +88,11 @@
             this.btnUpdate.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.btnUpdate.Location = new System.Drawing.Point(167, 320);
             this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(137, 45);
+            this.btnUpdate.Size = new System.Drawing.Size(146, 45);
             this.btnUpdate.TabIndex = 31;
             this.btnUpdate.Text = "Güncelle";
             this.btnUpdate.UseVisualStyleBackColor = false;
+            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
             // btnList
             // 
@@ -97,7 +100,7 @@
             this.btnList.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.btnList.Location = new System.Drawing.Point(167, 167);
             this.btnList.Name = "btnList";
-            this.btnList.Size = new System.Drawing.Size(137, 45);
+            this.btnList.Size = new System.Drawing.Size(146, 45);
             this.btnList.TabIndex = 30;
             this.btnList.Text = "Listele";
             this.btnList.UseVisualStyleBackColor = false;
@@ -205,11 +208,24 @@
             this.label1.TabIndex = 18;
             this.label1.Text = "Müşteri Id:";
             // 
+            // btnGetById
+            // 
+            this.btnGetById.BackColor = System.Drawing.Color.LightSalmon;
+            this.btnGetById.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.btnGetById.Location = new System.Drawing.Point(167, 371);
+            this.btnGetById.Name = "btnGetById";
+            this.btnGetById.Size = new System.Drawing.Size(146, 45);
+            this.btnGetById.TabIndex = 35;
+            this.btnGetById.Text = "Id\'ye Göre Getir";
+            this.btnGetById.UseVisualStyleBackColor = false;
+            this.btnGetById.Click += new System.EventHandler(this.btnGetById_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(943, 402);
+            this.ClientSize = new System.Drawing.Size(990, 439);
+            this.Controls.Add(this.btnGetById);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.btnDelete);
@@ -254,6 +270,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtCustomerId;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnGetById;
     }
 }
 
