@@ -39,7 +39,15 @@ Then we can create a method called **'public static void SQLDatabaseConnectionSt
 
 For the methos we will use for the insertion process, we again create an SQL query: **string query = 'Insert Into TblProduct (ProductName, ProductStock, ProductPrice, ProductCategory) values (@productName, @productStock, @productPrice, @productCategory)';** For the assignment of parameters, we first create a variable as **var parameters = new DynamicParameters();** and define **DynamicParameters()** a method in Dapper. Then we complete our assignments for each column as **parameters.Add('@productName', txtProductName.Text);** Finally since we will work asynchronously, we finish the addition process by using query and parameters mapping method in the **ExecuteSync** method in **Dapper** in the form of **await connection.ExecuteAsync(query, parameters);** Similarly, we add the delete and update features and as a final example to the **Dapper** topic, we add the operations showing the total number of books, the most expensive book and number of categories and finish our episode.
 
+**Notes:**
+
+**Mapping:** We match the table and the class with each other. This method is called mapping. The layer we will use in this structure is called **DTO**.
 
 ## 📌 Episode 24: Using MongoDb with C# Part 1
+With this section, we started the 601 module of the course with the subject of **MongoDB**. We started the section by designing a new form as an interface where can perform **CRUD** operations in the classic format. Then we right-clicked on our project and clicked on '**Manage Nuget Packages**' in the tab opened and in the window that opened, we went to the '**Browse**' section and typed '**MongoDB**' in the search tab and installed the '**MongoDB.Bson**' '**MongoDB.Driver**' packages.
+
+After this process we created a new folder called 'Entities' in our project and created a new class named customer in it. (This class will contain the properties of the customer entity we'll use.) Then we add the options we added to our application as properties, but unlike **MSSQL** we make the value of the id property string, not int. After adding all the necessary properties, we add 2 attributes in the form of **[BsonId]** and **[BsonRepresentation(BsonType.ObjectId)]** in order to use a **MongoDB** on the id. The purpose of the 2 attributes we add is to make the customer id information unique.
+
+After completing our operations in the 'Entites' folder, we added a new folder called 'Services' to our project and created a new class called **MongoDbConnection**. We created a field in the form of **private IMongoDatabase _database** in this class and created our constructor method by type ctor and after that press **Tab** button.
 
 ## 📌 Episode 25: Using MongoDb with C# Part 2
