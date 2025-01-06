@@ -48,6 +48,135 @@ With this section, we started the 601 module of the course with the subject of *
 
 After this process we created a new folder called 'Entities' in our project and created a new class named customer in it. (This class will contain the properties of the customer entity we'll use.) Then we add the options we added to our application as properties, but unlike **MSSQL** we make the value of the id property string, not int. After adding all the necessary properties, we add 2 attributes in the form of **[BsonId]** and **[BsonRepresentation(BsonType.ObjectId)]** in order to use a **MongoDB** on the id. The purpose of the 2 attributes we add is to make the customer id information unique.
 
-After completing our operations in the 'Entites' folder, we added a new folder called 'Services' to our project and created a new class called **MongoDbConnection**. We created a field in the form of **private IMongoDatabase _database** in this class and created our constructor method by type ctor and after that press **Tab** button.
+After completing our operations in the 'Entites' folder, we added a new folder called 'Services' to our project and created a new class called **MongoDbConnection**. We created a field in the form of **private IMongoDatabase _database** in this class and created our constructor method by type ctor and after that press **Tab** button. In the method we created, we create a variable in the form of **var client = new MongoClient('Connection address in MongoDb Compass application');** and we tell it to connected this local database server and define our connection address in it.
+
+Then, by writing **_database = client.GetDatabase('Db601Customer');** we call the **GetDatabase** method that comes into the client into the _database object we create above and enter the name of the new database to be created in the parameter value, and in this way, when our constructor method is called, it will be create our database. After completing our constructor method, we create a new method as **Public IMongoCollection<BsonDocument> GetCustomersCollection()** and return a value in the form of **return _database.GetCollection<BsonDocument>('Customers');**. The operation done here allows us to create a collection named 'Customer' in our database created above. After finishing our work in this class, we created a new class called **CustomerOperations** in the **Services** folder and wrote the following codes in it:
+
+    public class CustomerOperations
+    {
+        public void AddCustomer(Customer customer)
+        {
+
+            var connection = new MongoDbConnection(); // We've requested a MongoDb connection here.
+
+            var customerCollection = connection.GetCustomersCollection(); // We're connected to our table here.
+
+            var document = new BsonDocument // In this section, we sent the parameters that our entity has. The reason why we do not send the id is that the id value will be automatically incremented, just like in MSSQL.
+            {
+                {"CustomerName",customer.CustomerName },
+                {"CustomerSurname",customer.CustomerSurname },
+                {"CustomerCity",customer.CustomerCity },
+                {"CustomerBalance",customer.CustomerBalance },
+                {"CustomerShoppingCount",customer.CustomerShoppingCount }
+            };
+
+            customerCollection.InsertOne(document); // Here we have also carried out the addition process.
+        }
+    }
+
+Finally to check that the operations are working, we performed the insertion process in our form application bu writing the following codes: (Unlike the classic method, when working on **MongoDb**, we create a variable and write our data into it as shown below.)
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            var customer = new Customer()
+            {
+                CustomerName = txtCustomerName.Text,
+                CustomerSurname = txtCustomerSurname.Text,
+                CustomerCity = txtCustomerCity.Text,
+                CustomerBalance = decimal.Parse(txtCustomerBalance.Text),
+                CustomerShoppingCount = int.Parse(txtCustomerShoppingCount.Text)
+            };
+
+            customerOperations.AddCustomer(customer);
+            MessageBox.Show("Ekleme işlemi başarılı");
+        }
+
+**Notes:**
+
+**MongoDb:** MongoDb is an open source, document-oriented NoSQL database management system. Unlike traditional relational databases (RDBMS), it uses its own BSON (documents), which are JSON-like documents, instead of table and row structures. This makes MongoDb particularly well suited for big data, dynamic data structures and rapid prototyping requirements.
+
+**Differents Between MongoDb and MSSQL:**
+
+**BSON:** MongoDb's binary format, similar to JSON (Javascript Object Nonation) but faster and supporting more data types.
+
+**Binary Format:** It's the representation of data at the most basic level that a computer can understand, consisting of 1s and 0s. Unlike text-based formats like JSON, binary formats store and process data in a compressed and fast-processable way.
+
+**Object-Id:** A 12-byte ID that unqiely identifies documents in MongoDb.
 
 ## 📌 Episode 25: Using MongoDb with C# Part 2
+We will continue the **MongoDb** topic that we started in the last episode in this course. We have only added new data through the form application. We started this section by bringing all the data and listing it. We go to the **CustomerOperations** class and write this codes in it:
+
+    public List<Customer> GetAllCustomer()
+        {
+            var connection = new MongoDbConnection(); // We create a Connection variable and access the constructor method in the MongoDbConnection class we created in the                                                          previous lesson.
+            var customerCollection = connection.GetCustomersCollection(); // In this section we access the collection of our link above.
+            var customers = customerCollection.Find(new BsonDocument()).ToList(); // In this section, we memorise the data in the collection created above. 
+            List<Customer> customerList = new List<Customer>(); // We create an empty Customer list in memory.
+            foreach (var c in customers) // Here, with the foreach loop, we make it pull the data from the customers variable that we have memorised.
+            {
+                customerList.Add(new Customer // In this section, we transfer our data into the Customer list, which we created empty, respectively.
+                {
+                    CustomerId = c["_id"].ToString(),
+                    CustomerName = c["CustomerName"].ToString(),
+                    CustomerSurname = c["CustomerSurname"].ToString(),
+                    CustomerCity = c["CustomerCity"].ToString(),
+                    CustomerBalance = decimal.Parse(c["CustomerBalance"].ToString()),
+                    CustomerShoppingCount = int.Parse(c["CustomerShoppingCount"].ToString())
+                });
+            }
+
+            return customerList; // Finally, in this section, we return the value of the Customer list filled with data. Without this part, the data will not come when                                         this method is called.
+        }
+
+After creating this method, we only need to go to the form application and write 2 lines of code to the list button method. **List<Customer> customers = customerOperations.GetAllCustomer();**. The process in this section is to create a new list called customers, call the **GetAllCustomers** method we created in the **CustomerOperations** class and transfer the **customerList** data in it. In the other line, we send the customers list to the **DataSource** value of the **DGV** in our form and that's it.
+
+For update, delete and fetch operations according to id, we go the **CustomerOperations** class again and create the following methods and end the MongoDb topic with finishing episode 26:
+
+**Update Method Codes:**
+
+        public void UpdateCustomer(Customer customer)
+        {
+            var connection = new MongoDbConnection();
+            var customerCollection = connection.GetCustomersCollection();
+            var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(customer.CustomerId)); // Here we assign the id value we will use to the filter variable.
+            var updatedValue = Builders<BsonDocument>.Update // In this section, we have written the system that updates the data one by one using the set method of update.
+                .Set("CustomerName", customer.CustomerName)
+                .Set("CustomerSurname", customer.CustomerSurname)
+                .Set("CustomerCity", customer.CustomerCity)
+                .Set("CustomerBalance", customer.CustomerBalance)
+                .Set("CustomerShoppingCount", customer.CustomerShoppingCount);
+
+            customerCollection.UpdateOne(filter, updatedValue); // Finally, here, we performed the update process by sending the relevant id variable and the updatedValue                                                                     variable carrying the updated values as parameters into the UpdateOne method.
+        }
+
+**Delete Method Codes:**
+
+        public void DeleteCustomer(string id)
+        {
+            var connection = new MongoDbConnection(); // We create a Connection variable and access the constructor method in the MongoDbConnection class we created in the                                                          previous lesson.
+            var customerCollection = connection.GetCustomersCollection(); // In this section we access the collection of our link above.
+            var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id)); // Here we assign the id value we will use to the filter variable.
+            customerCollection.DeleteOne(filter); // Finally, in this section, we call the DeleteOne method, which is the method that performs the deletion operation in                                                         MongoDb, and assign the filter variable as a parameter.
+        }
+
+**GetById Method Codes:**
+
+    public Customer GetCustomerById(string id)
+    {
+    var connection = new MongoDbConnection();
+    var customerCollection = connection.GetCustomersCollection();
+    var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id)); // Here we assign the id value we will use to the filter variable.
+    var result = customerCollection.Find(filter).FirstOrDefault(); // Since we will get a single data here, we sent the data to the result variable using the                                                                                     FirstOrDefault method.
+
+    return new Customer // Finally, we created a new Customer information and assigned the data going to the result.
+    {
+        CustomerId = id,
+        CustomerName = result["CustomerName"].ToString(),
+        CustomerSurname = result["CustomerSurname"].ToString(),
+        CustomerCity = result["CustomerCity"].ToString(),
+        CustomerBalance = decimal.Parse(result["CustomerBalance"].ToString()),
+        CustomerShoppingCount = int.Parse(result["CustomerShoppingCount"].ToString())
+    };
+
+**View of the data on MongoDb Compass App:**
+}
