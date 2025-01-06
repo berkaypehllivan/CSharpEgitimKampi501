@@ -43,6 +43,9 @@ For the methos we will use for the insertion process, we again create an SQL que
 
 **Mapping:** We match the table and the class with each other. This method is called mapping. The layer we will use in this structure is called **DTO**.
 
+**Form Application View:**
+![image alt](https://github.com/berkaypehllivan/CSharpEgitimKampi501-601/blob/9404e6f029f55f9889697193347407388c7660f1/Dapper%20Form%20Application.png)
+
 ## 📌 Episode 24: Using MongoDb with C# Part 1
 With this section, we started the 601 module of the course with the subject of **MongoDB**. We started the section by designing a new form as an interface where can perform **CRUD** operations in the classic format. Then we right-clicked on our project and clicked on '**Manage Nuget Packages**' in the tab opened and in the window that opened, we went to the '**Browse**' section and typed '**MongoDB**' in the search tab and installed the '**MongoDB.Bson**' '**MongoDB.Driver**' packages.
 
@@ -96,6 +99,7 @@ Finally to check that the operations are working, we performed the insertion pro
 **MongoDb:** MongoDb is an open source, document-oriented NoSQL database management system. Unlike traditional relational databases (RDBMS), it uses its own BSON (documents), which are JSON-like documents, instead of table and row structures. This makes MongoDb particularly well suited for big data, dynamic data structures and rapid prototyping requirements.
 
 **Differents Between MongoDb and MSSQL:**
+![image alt](https://github.com/berkaypehllivan/CSharpEgitimKampi501-601/blob/9404e6f029f55f9889697193347407388c7660f1/MongoDb%20MSSQL%20Differents.png)
 
 **BSON:** MongoDb's binary format, similar to JSON (Javascript Object Nonation) but faster and supporting more data types.
 
@@ -163,20 +167,21 @@ For update, delete and fetch operations according to id, we go the **CustomerOpe
 
     public Customer GetCustomerById(string id)
     {
-    var connection = new MongoDbConnection();
-    var customerCollection = connection.GetCustomersCollection();
-    var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id)); // Here we assign the id value we will use to the filter variable.
-    var result = customerCollection.Find(filter).FirstOrDefault(); // Since we will get a single data here, we sent the data to the result variable using the                                                                                     FirstOrDefault method.
+        var connection = new MongoDbConnection();
+        var customerCollection = connection.GetCustomersCollection();
+        var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id)); // Here we assign the id value we will use to the filter variable.
+        var result = customerCollection.Find(filter).FirstOrDefault(); // Since we will get a single data here, we sent the data to the result variable using the                                                                                     FirstOrDefault method.
 
-    return new Customer // Finally, we created a new Customer information and assigned the data going to the result.
-    {
-        CustomerId = id,
-        CustomerName = result["CustomerName"].ToString(),
-        CustomerSurname = result["CustomerSurname"].ToString(),
-        CustomerCity = result["CustomerCity"].ToString(),
-        CustomerBalance = decimal.Parse(result["CustomerBalance"].ToString()),
-        CustomerShoppingCount = int.Parse(result["CustomerShoppingCount"].ToString())
-    };
-
+        return new Customer // Finally, we created a new Customer information and assigned the data going to the result.
+        {
+            CustomerId = id,
+            CustomerName = result["CustomerName"].ToString(),
+            CustomerSurname = result["CustomerSurname"].ToString(),
+            CustomerCity = result["CustomerCity"].ToString(),
+            CustomerBalance = decimal.Parse(result["CustomerBalance"].ToString()),
+            CustomerShoppingCount = int.Parse(result["CustomerShoppingCount"].ToString())
+        };
+    }
+    
 **View of the data on MongoDb Compass App:**
-}
+![image alt](https://github.com/berkaypehllivan/CSharpEgitimKampi501-601/blob/9404e6f029f55f9889697193347407388c7660f1/MongoDb%20Compass.png)
